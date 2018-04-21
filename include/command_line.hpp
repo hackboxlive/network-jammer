@@ -27,6 +27,12 @@ class command_line	{
 		void show_menu();
 		void show_header();
 		void show_action();
+		void list_interfaces();
+		void list_accesspoints();
+		void choose_interface(int id);
+		void choose_accesspoint(int id);
+		void list_coonectedhosts();
+		void attack();
 }
 
 #endif
