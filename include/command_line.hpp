@@ -21,3 +21,5 @@ class command_line	{
 		state_ state;
 		
 }
+
+#endif
