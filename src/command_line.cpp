@@ -41,6 +41,9 @@ void command_line::show_action()	{
 			choose_interface(interface_id);
 			state = LISTAPS;
 			break;
+		case LISTAPS:
+			list_accesspoints();
+
 	}
 }
 
@@ -62,3 +65,22 @@ void command_line::choose_interface(int id)	{
 	network_obj.set_interface(iface);
 }
 
+void command_line::list_accesspoints()	{
+	aps = network_obj.get_access_points();
+	cout << endl << endl;
+	int i = 0;
+	for(const pair<string, set<address_type> >& p: aps)	{
+		if(p.first == "")	{
+			aps.erase(p.first);
+			continue;
+		}
+		cout << i++ << ". " << p.first << " -> [";
+		for(set<address_type>::iterator it = p.second.begin(); it != p.second.end(); it++)	{
+			cout << (*it).to_string();
+			if((it != p.second.end()) && (next(it) != p.second.end()))	{
+				cout << ", ";
+			}
+		}
+		cout << "]" << endl;
+	}
+}
