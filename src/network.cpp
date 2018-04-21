@@ -17,20 +17,6 @@ network::network()	{
 network::~network()	{
 }
 
-void network::send_deauth()	{
-	sender.send(radio, iface_name);
-}
-
-std::vector<std::wstring> network::get_interfaces()	{
-	std::vector<std::wstring> interface_names;
-	std::vector<NetworkInterface> interfaces = NetworkInterface::all();
-	for(const NetworkInterface& iface : interfaces)	{
-		interface_names.push_back(iface.friendly_name());
-	}
-
-	return interface_names;
-}
-
 std::vector<std::string> network::get_connected_devices()	{
 	std::vector<std::string> targets;
 	NetworkInterface iface = NetworkInterface(iface_name);
@@ -48,6 +34,20 @@ std::vector<std::string> network::get_connected_devices()	{
 	return targets;
 }
 
+std::vector<std::wstring> network::get_interfaces()	{
+	std::vector<std::wstring> interface_names;
+	std::vector<NetworkInterface> interfaces = NetworkInterface::all();
+	for(const NetworkInterface& iface : interfaces)	{
+		interface_names.push_back(iface.friendly_name());
+	}
+
+	return interface_names;
+}
+
+void network::send_deauth()	{
+	sender.send(radio, iface_name);
+}
+
 std::map<std::string, std::set<address_type> > network::get_access_points()	{
 	SnifferConfiguration config;
 	config.set_promisc_mode(true);
@@ -58,8 +58,16 @@ std::map<std::string, std::set<address_type> > network::get_access_points()	{
 	std::thread scanThread(&Network::stopScan, &scanning);
 	scanThread.detach();
 
-	sniffer.sniff_loop(make_sniffer_handler(this, &Network::scanCallback));
+	sniffer.sniff_loop(make_sniffer_handler(this, &Network::scan_callback));
 
 	return accessPoints;
 }
 
+bool network::scan_callback(PDU &pdu)	{
+	const Dot11Beacon& beacon = pdu.rfind_pdu<Dot11Beacon>();
+
+}
+
+void network::set_interface(std::string interface)	{
+	iface_name = interface;
+}
