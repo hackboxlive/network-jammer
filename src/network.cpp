@@ -13,3 +13,11 @@ network::network()	{
 	deauth_packet.reason_code(0x007);	//From airplay-ng
 	radio = RadioTap() / deauth_packet;
 }
+
+network::~network()	{
+}
+
+void network::send_deauth()	{
+	sender.send(radio, iface_name);
+}
+
