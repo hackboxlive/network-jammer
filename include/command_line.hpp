@@ -1,6 +1,15 @@
 #ifndef COMMAND_LINE_HPP
 #define COMMAND_LINE_HPP
 
+#include <string>
+#include <unistd.h>
+#include <cassert>
+#include <clocale>
+#include <locale>
+#include <vector>
+#include <codecvt>
+#include "network.hpp"
+
 class command_line	{
 	typedef Tins::Dot11::address_type address_type;
 
@@ -33,6 +42,6 @@ class command_line	{
 		void choose_accesspoint(int id);
 		void list_coonectedhosts();
 		void attack();
-}
+};
 
 #endif

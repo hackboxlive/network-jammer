@@ -32,6 +32,6 @@ class network	{
 		std::vector<std::string> get_connected_devices();
 		std::map<std::string, std::set<address_type> > get_access_points();
 
-}
+};
 
 #endif
