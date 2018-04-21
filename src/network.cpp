@@ -71,3 +71,7 @@ bool network::scan_callback(PDU &pdu)	{
 void network::set_interface(std::string interface)	{
 	iface_name = interface;
 }
+
+std::string network::get_bssid()	{
+	return bssid.to_string();
+}

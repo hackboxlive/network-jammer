@@ -33,6 +33,7 @@ void command_line::show_header()	{
 
 void command_line::show_action()	{
 	switch(state)	{
+		
 		case CHOOSEIF:
 			list_interfaces();
 			int interface_id;
@@ -41,9 +42,28 @@ void command_line::show_action()	{
 			choose_interface(interface_id);
 			state = LISTAPS;
 			break;
+		
 		case LISTAPS:
 			list_accesspoints();
+			int accesspoint_id;
+			cout << endl << endl << "Access point: ";
+			cin >> accesspoint_id;
+			choose_accesspoint(accesspoint_id);
+			state = LISTHOSTS;
+			break;
+		
+		case LISTHOSTS:
+			list_connectedhosts();
+			state = WHITELIST;
+			break;
 
+		case WHITELIST:
+			state = ATTACK;
+			break;
+
+		case ATTACK:
+			attack();
+			break;
 	}
 }
 
@@ -82,5 +102,30 @@ void command_line::list_accesspoints()	{
 			}
 		}
 		cout << "]" << endl;
+	}
+}
+
+void command_line::choose_accesspoint(int id)	{
+	int i = 1;
+	for(map<string, set<address_type> >::iterator it = aps.begin(); it != aps.end(); it++, i++)	{
+		if(i == id)	{
+			network_obj.set_bssid((*(it->second.begin())).to_string());
+			break;
+		}
+	}
+}
+
+void command_line::list_connectedhosts()	{
+	targets = network_obj.get_connected_devices();
+}
+
+void command_line::attack()	{
+	cout << "-> BSSID: " << network_obj.get_bssid() << endl;
+	cout << "-> Target: xx:xx:xx:xx:xx:xx" << endl << endl;
+	cout << "Deauthenticating.. (ctrl + c) to stop" << endl;
+
+	while(true)	{
+		network_obj.send_deauth();
+		usleep(1000000);
 	}
 }
