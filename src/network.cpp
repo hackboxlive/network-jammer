@@ -21,3 +21,12 @@ void network::send_deauth()	{
 	sender.send(radio, iface_name);
 }
 
+std::vector<std::wstring> network::get_interfaces()	{
+	std::vector<std::wstring> interface_names;
+	std::vector<NetworkInterface> interfaces = NetworkInterface::all();
+	for(const NetworkInterface& iface : interfaces)	{
+		interface_names.push_back(iface.friendly_name());
+	}
+
+	return interface_names;
+}
