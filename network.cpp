@@ -1,3 +1,4 @@
+#include <iostream>
 #include <codecvt>
 #include <zconf.h>
 #include <thread>
@@ -48,28 +49,60 @@ void network::send_deauth()	{
 	sender.send(radio, iface_name);
 }
 
-std::map<std::string, std::set<address_type> > network::get_access_points()	{
+std::map<std::string, std::set<Dot11::address_type> > network::get_access_points()	{
 	SnifferConfiguration config;
 	config.set_promisc_mode(true);
 	config.set_filter("type mgt subtype beacon");
 	config.set_rfmon(true);
 
 	Sniffer sniffer(iface_name, config);
-	std::thread scanThread(&Network::stopScan, &scanning);
+	std::thread scanThread(&network::stop_scan, &scanning);
 	scanThread.detach();
 
-	sniffer.sniff_loop(make_sniffer_handler(this, &Network::scan_callback));
+	sniffer.sniff_loop(make_sniffer_handler(this, &network::scan_callback));
 
-	return accessPoints;
+	return access_points;
+}
+
+void network::stop_scan(bool *scanning)	{
+	sleep(5);
+	*scanning = false;
 }
 
 bool network::scan_callback(PDU &pdu)	{
 	const Dot11Beacon& beacon = pdu.rfind_pdu<Dot11Beacon>();
-
+	if (!beacon.from_ds() && !beacon.to_ds()) {
+		address_type addr = beacon.addr2();
+		ssids_type::iterator it = ssids.find(addr);
+		if (it == ssids.end()) {
+            try {
+				std::string ssid = beacon.ssid();
+				ssids.insert(addr);
+				if(!ssid.empty()) {
+					if(access_points.count(ssid)) {
+						std::set<Dot11::address_type> addresses = access_points[ssid];
+						addresses.insert(addr);
+						access_points[ssid] = addresses;
+					}
+					else	{
+						std::set<Dot11::address_type> address;
+						address.insert(addr);
+						access_points.insert(std::make_pair(ssid, address));
+					}
+				}
+			}
+			catch (std::runtime_error&) {}
+		}
+	}
+	return scanning;
 }
 
 void network::set_interface(std::string interface)	{
 	iface_name = interface;
+}
+
+void network::set_bssid(const std::string hw_addr)	{
+	bssid = HWAddress<6>(hw_addr);
 }
 
 std::string network::get_bssid()	{

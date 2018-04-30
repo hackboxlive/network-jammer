@@ -69,7 +69,7 @@ void command_line::show_action()	{
 }
 
 void command_line::list_interfaces()	{
-	interfaces = network_obj.get_connected_devices();
+	interfaces = network_obj.get_interfaces();
 
 	int i = 0;
 	for(const wstring& iface : interfaces)	{
