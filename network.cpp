@@ -2,7 +2,7 @@
 #include <zconf.h>
 #include <thread>
 #include <boost/algorithm/string.hpp>
-#include "../include/network.hpp"
+#include "network.hpp"
 
 using namespace Tins;
 

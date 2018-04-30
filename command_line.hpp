@@ -40,7 +40,7 @@ class command_line	{
 		void list_accesspoints();
 		void choose_interface(int id);
 		void choose_accesspoint(int id);
-		void list_coonectedhosts();
+		void list_connectedhosts();
 		void attack();
 };
 

@@ -1,4 +1,4 @@
-#include "../include/command_line.hpp"
+#include "command_line.hpp"
 
 int main()	{
 	command_line cli;
