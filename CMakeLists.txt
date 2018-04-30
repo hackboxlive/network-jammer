@@ -10,8 +10,8 @@ set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_library(TINS_LIBRARY tins)
 find_package (Threads REQUIRED)
 
-set(SOURCE_FILES main.cpp CLI.cpp CLI.h Network.cpp Network.h)
-add_executable(main ${SOURCE_FILES})
+set(SOURCE_FILES main.cpp command_line.cpp command_line.hpp network.cpp network.hpp)
+add_executable(network-jammer ${SOURCE_FILES})
 
-target_link_libraries(network_jammer "${TINS_LIBRARY}")
-target_link_libraries(network_jammer ${CMAKE_THREAD_LIBS_INIT})
+target_link_libraries(network-jammer "${TINS_LIBRARY}")
+target_link_libraries(network-jammer ${CMAKE_THREAD_LIBS_INIT})

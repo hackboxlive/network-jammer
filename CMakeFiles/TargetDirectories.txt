@@ -1,0 +1,3 @@
+/home/mr_knownothing/github/network-jammer/CMakeFiles/rebuild_cache.dir
+/home/mr_knownothing/github/network-jammer/CMakeFiles/edit_cache.dir
+/home/mr_knownothing/github/network-jammer/CMakeFiles/network-jammer.dir
