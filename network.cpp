@@ -108,3 +108,5 @@ void network::set_bssid(const std::string hw_addr)	{
 std::string network::get_bssid()	{
 	return bssid.to_string();
 }
+
+//reference from https://github.com/M4gicT0/ShockWave
